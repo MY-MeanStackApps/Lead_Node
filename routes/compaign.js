@@ -6,7 +6,6 @@ const COMPAIGN = require('../models/compaign');
 const LEAD = require('../models/lead');
 
 router.post('/create', async function(req, res, next) {
-    console.log(req.body)
     var isExist = await COMPAIGN.findOne({ lead: req.body.lead });
     if (isExist) {
         res.json({ message: 'lead already' });
@@ -25,6 +24,12 @@ router.get('/:id', async function(req, res, next) {
     var singleComp = await COMPAIGN.find({ _id: req.params.id });
     res.json({ message: 'success', data: singleComp });
 })
+
+router.delete('/:id', async function(req, res, next) {
+    var comp = await COMPAIGN.deleteOne({ _id: req.params.id });
+    res.json({ message: 'success' })
+
+});
 
 
 module.exports = router;
