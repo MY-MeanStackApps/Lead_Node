@@ -6,13 +6,8 @@ const COMPAIGN = require('../models/compaign');
 const LEAD = require('../models/lead');
 
 router.post('/create', async function(req, res, next) {
-    var isExist = await COMPAIGN.findOne({ lead: req.body.lead });
-    if (isExist) {
-        res.json({ message: 'lead already' });
-    } else {
-        var comp = await COMPAIGN.create(req.body);
-        res.json({ message: 'success', data: comp });
-    }
+    var comp = await COMPAIGN.create(req.body);
+    res.json({ message: 'success', data: comp });
 })
 
 router.get('/getall', async function(req, res, next) {
@@ -31,5 +26,39 @@ router.delete('/:id', async function(req, res, next) {
 
 });
 
+router.post('/update', async function(req, res, next) {
+
+    COMPAIGN.findOne({ _id: req.body.id }).then(fetch => {
+        if (fetch.email == req.body.email) {
+            COMPAIGN.updateOne({
+                _id: req.body.id
+            }, {
+                $set: {
+                    name: req.body.name,
+                    email: req.body.email,
+                }
+            }).then(fetch => {
+                res.json({ message: 'success' })
+            });
+        } else if (fetch.email != req.body.email) {
+            COMPAIGN.findOne({ email: req.body.email }).then(isExist => {
+                if (isExist) {
+                    res.json({ message: 'email already taken' })
+                } else {
+                    COMPAIGN.updateOne({
+                        _id: req.body.id
+                    }, {
+                        $set: {
+                            name: req.body.name,
+                            email: req.body.email,
+                        }
+                    }).then(fetch => {
+                        res.json({ message: 'success' })
+                    });
+                }
+            });
+        }
+    });
+});
 
 module.exports = router;

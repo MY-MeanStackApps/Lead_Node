@@ -1,9 +1,8 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
-    // name: String,
-    // email: String,
-    // phone: String,
+    name: String,
+    email: String,
     compaigndate: String,
     lead: { type: mongoose.Schema.Types.ObjectId, ref: "lead" },
 }, { timestamps: true }, )

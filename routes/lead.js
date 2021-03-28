@@ -6,9 +6,12 @@ const LEAD = require('../models/lead');
 const COMPAIGN = require('../models/compaign');
 
 router.post('/create', async function(req, res, next) {
-    var isExist = await LEAD.findOne({ email: req.body.email });
-    if (isExist) {
+    var isExistemail = await LEAD.findOne({ email: req.body.email });
+    var isExistPhone = await LEAD.findOne({ phone: req.body.phone });
+    if (isExistemail) {
         res.json({ message: 'email already' });
+    } else if (isExistPhone) {
+        res.json({ message: 'phone already' });
     } else {
         var leadData = await LEAD.create(req.body);
         res.json({ message: 'success', data: leadData });
@@ -23,6 +26,7 @@ router.get('/getall', async function(req, res, next) {
     // for (let i = 0; i < fetchLead.length; i++) {
     //     Ids.push(fetchLead[i]._id);
     // }
+
     // var fetchcomp = await COMPAIGN.find({ lead: Ids });
 
     // for (let j = 0; j < fetchLead.length; j++) {
