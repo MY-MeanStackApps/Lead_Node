@@ -11,7 +11,7 @@ router.post('/create', async function(req, res, next) {
             compaign: req.body.compaign
         });
     }
-    res.json({ message: 'success', data: comp });
+    res.json({ message: 'success' });
 })
 
 router.get('/getall/:compId', async function(req, res, next) {

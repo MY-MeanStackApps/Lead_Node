@@ -7,6 +7,7 @@ const COMPAIGN = require('../models/compaign');
 const COMPAIGNMEMBER = require('../models/compaignMember');
 
 router.post('/create', async function(req, res, next) {
+    console.log(req.body);
     var isExistemail = await LEAD.findOne({ email: req.body.email });
     var isExistPhone = await LEAD.findOne({ phone: req.body.phone });
     if (isExistemail) {
@@ -51,7 +52,9 @@ router.get('/:id', async function(req, res, next) {
 router.delete('/:id', async function(req, res, next) {
     var compmem = await COMPAIGNMEMBER.findOne({ lead: req.params.id });
     var del_lead = await LEAD.deleteOne({ _id: req.params.id });
-    var del_compaignMember = await COMPAIGNMEMBER.deleteOne({ _id: compmem._id });
+    if (compmem) {
+        var del_compaignMember = await COMPAIGNMEMBER.deleteOne({ _id: compmem._id });
+    }
     res.json({ message: 'success' });
 });
 

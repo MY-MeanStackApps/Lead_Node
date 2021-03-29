@@ -3,6 +3,7 @@ var passwordHash = require('password-hash');
 const jwt = require("jsonwebtoken");
 var router = express.Router();
 const COMPAIGN = require('../models/compaign');
+const COMPAIGNMEMBER = require('../models/compaignMember');
 const LEAD = require('../models/lead');
 
 router.post('/create', async function(req, res, next) {
@@ -22,6 +23,10 @@ router.get('/:id', async function(req, res, next) {
 
 router.delete('/:id', async function(req, res, next) {
     var comp = await COMPAIGN.deleteOne({ _id: req.params.id });
+    var fetchAll = await COMPAIGNMEMBER.find({ compaign: req.params.id });
+    for (let i = 0; i < fetchAll.length; i++) {
+        var deleteAll = await COMPAIGNMEMBER.deleteOne({ compaign: req.params.id });
+    }
     res.json({ message: 'success' })
 
 });
