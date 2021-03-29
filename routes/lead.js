@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 var router = express.Router();
 const LEAD = require('../models/lead');
 const COMPAIGN = require('../models/compaign');
+const COMPAIGNMEMBER = require('../models/compaignMember');
 
 router.post('/create', async function(req, res, next) {
     var isExistemail = await LEAD.findOne({ email: req.body.email });
@@ -48,13 +49,10 @@ router.get('/:id', async function(req, res, next) {
 });
 
 router.delete('/:id', async function(req, res, next) {
-    var comp = await COMPAIGN.findOne({ lead: req.params.id });
-    if (comp) {
-        res.json({ message: 'lead added in compaign' })
-    } else {
-        var del = await LEAD.deleteOne({ _id: req.params.id });
-        res.json({ message: 'success' })
-    }
+    var compmem = await COMPAIGNMEMBER.findOne({ lead: req.params.id });
+    var del_lead = await LEAD.deleteOne({ _id: req.params.id });
+    var del_compaignMember = await COMPAIGNMEMBER.deleteOne({ _id: compmem._id });
+    res.json({ message: 'success' });
 });
 
 router.post('/update', async function(req, res, next) {

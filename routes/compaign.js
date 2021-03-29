@@ -11,13 +11,13 @@ router.post('/create', async function(req, res, next) {
 })
 
 router.get('/getall', async function(req, res, next) {
-    var fetchall = await COMPAIGN.find().populate('lead');
+    var fetchall = await COMPAIGN.find();
     res.json({ message: 'success', data: fetchall });
 })
 
 router.get('/:id', async function(req, res, next) {
-    var singleComp = await COMPAIGN.find({ _id: req.params.id });
-    res.json({ message: 'success', data: singleComp });
+    var single = await COMPAIGN.findOne({ _id: req.params.id });
+    res.json({ message: 'success', data: single });
 })
 
 router.delete('/:id', async function(req, res, next) {
