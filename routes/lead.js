@@ -21,37 +21,26 @@ router.post('/create', async function(req, res, next) {
 })
 
 router.post('/create/csv', async function(req, res, next) {
-    // console.log(req.body);
     var alreday = [];
     var store_email = [];
-    for (let i = 0; i < req.body.email.length; i++) {
-        store_email.push(req.body.email[i]);
+
+    for (let i = 0; i < req.body.arr.length; i++) {
+        store_email.push(req.body.arr[i].email);
         alreday = await LEAD.find({ email: store_email, });
     }
-    // console.log(store_lead_temp);
-    // console.log(store_com_temp);
 
     for (let j = 0; j < alreday.length; j++) {
         var deleted = await LEAD.deleteOne({ _id: alreday[j]._id });
     }
 
-    for (let i = 0; i < req.body.lead.length; i++) {
-        var comp = await LEAD.create({
-            lead: req.body.lead[i]._id,
+    for (let k = 0; k < req.body.arr.length; k++) {
+        var leadData = await LEAD.create({
+            name: req.body.arr[k].name,
+            email: req.body.arr[k].email,
+            phone: req.body.arr[k].phone
         });
     }
-    res.json({ message: 'success' });
-    // console.log(req.body);
-    // var isExistemail = await LEAD.findOne({ email: req.body.email });
-    // var isExistPhone = await LEAD.findOne({ phone: req.body.phone });
-    // if (isExistemail) {
-    //     res.json({ message: 'email already' });
-    // } else if (isExistPhone) {
-    //     res.json({ message: 'phone already' });
-    // } else {
-    //     var leadData = await LEAD.create(req.body);
-    //     res.json({ message: 'success', data: leadData });
-    // }
+    res.json({ message: 'success', data: leadData })
 })
 
 router.get('/getall', async function(req, res, next) {

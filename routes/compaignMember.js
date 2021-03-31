@@ -5,7 +5,6 @@ const LEAD = require('../models/lead');
 const COMPAIGN = require('../models/compaign');
 
 router.post('/create', async function(req, res, next) {
-    // console.log(req.body);
     var alreday = [];
     var store_lead_temp = [];
     var store_com_temp = [];
@@ -14,9 +13,6 @@ router.post('/create', async function(req, res, next) {
         store_com_temp.push(req.body.compaign);
         alreday = await COMPAIGNMEMBER.find({ lead: store_lead_temp, compaign: store_com_temp });
     }
-    // console.log(store_lead_temp);
-    // console.log(store_com_temp);
-
     for (let j = 0; j < alreday.length; j++) {
         var deleted = await COMPAIGNMEMBER.deleteOne({ _id: alreday[j]._id });
     }
@@ -27,7 +23,11 @@ router.post('/create', async function(req, res, next) {
             compaign: req.body.compaign
         });
     }
-    res.json({ message: 'success' });
+    if (alreday.length >= 1) {
+        res.json({ message: 'success', alert: 1 });
+    } else {
+        res.json({ message: 'success', alert: 0 });
+    }
 })
 
 router.get('/getall/:compId', async function(req, res, next) {
